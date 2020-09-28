@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((screen_width,screen_height))
 
 #Title and Icon
 pygame.display.set_caption("Royal Game of Ur")
-icon = pygame.image.load("icon.png")
+icon = pygame.image.load("images/icon.png")
 pygame.display.set_icon(icon)
 
 #Load Images
