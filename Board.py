@@ -1,7 +1,9 @@
 import pygame, sys
 from pygame.locals import *
 import random
+from IA_logic2 import* 
 
+#globales
 token_white_off = 7
 token_black_off = 7
 
@@ -10,6 +12,8 @@ token_black_play = 0
 
 token_white_win = 0
 token_black_win = 0
+
+cont = 0
 
 #iniciar pygame
 pygame.init()
@@ -75,15 +79,12 @@ def board():
     pygame.display.set_caption("ROYAL GAME OF UR")
     board_win.blit(image_board,(0,0))
     board_win.blit(dice2,(600,500))
-    
-
-    
+            
     global token_white_off
     global token_black_off
     global token_white_win
     global token_black_win
 
-    
     
     Fichas = fuente.render('Fichas:', 1, (0, 0, 0))
     
@@ -115,18 +116,23 @@ def board():
             if event.type == MOUSEBUTTONUP:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
   
-                print(mouse_x,mouse_y)
+                """print(mouse_x,mouse_y)
                 if mouse_x >= 66 and mouse_x <= 138:
                     print("aqui x")
                     if mouse_y >= 228 and mouse_y <= 284:
-                        print("aqui y")
+                        print("aqui y")"""
+                
                         
 
    
                 #si se presionan los datos
                 if mouse_x >= 600 and mouse_x <= 800:
                     if mouse_y >= 500 and mouse_y <= 600:
-                        num = 1 #ran()
+                        num = 0
+                        if token_white_play == 0 and token_white_win == 0:
+                            num = 2
+                        else:
+                            num = ran()
                         if num == 1:
                             board_win.blit(dice_fond,(597,497))
                             board_win.blit(dice1,(600,500))
@@ -140,6 +146,9 @@ def board():
                             
                             win_w = fuente.render(str(token_white_win), 1, (0, 0, 0))
                             board_win.blit(win_w, (700, 423))
+
+                            pas = fuente.render("PASS", 1, (0, 0, 0))
+                            board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
                                  t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
@@ -162,6 +171,9 @@ def board():
                             
                             win_w = fuente.render(str(token_white_win), 1, (0, 0, 0))
                             board_win.blit(win_w, (700, 423))
+
+                            pas = fuente.render("PASS", 1, (0, 0, 0))
+                            board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
                                  t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
@@ -183,6 +195,9 @@ def board():
                             
                             win_w = fuente.render(str(token_white_win), 1, (0, 0, 0))
                             board_win.blit(win_w, (700, 423))
+
+                            pas = fuente.render("PASS", 1, (0, 0, 0))
+                            board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
                                  t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
@@ -204,6 +219,9 @@ def board():
                             
                             win_w = fuente.render(str(token_white_win), 1, (0, 0, 0))
                             board_win.blit(win_w, (700, 423))
+
+                            pas = fuente.render("PASS", 1, (0, 0, 0))
+                            board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
                                  t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
@@ -216,21 +234,31 @@ def board():
 
     
 def ran():
+    global cont
     temp = random.randint(1,12)
-    if temp >=1 and temp <= 4:
-        return 1
-    elif temp >=5 and temp <= 6:
-        return 3
-    elif temp >=7 and temp <= 10:
-        return 2
-    elif temp >= 11 and temp <= 12:
-        return 4
+    if cont < 3:
+        if token_black_play == 0 and token_black_win == 0:
+            cont += 1
+            return 4
+        elif token_black_play == 1 and token_black_win == 0:
+            cont+= 1
+            return 4
+    elif cont >= 3:
+        if token_black_play == 1 and token_black_win == 0:
+            return 3
+        elif temp >=1 and temp <= 4:
+            return 1
+        elif temp >=5 and temp <= 6:
+            return 3
+        elif temp >=7 and temp <= 10:
+            return 2
+        elif temp >= 11 and temp <= 12:
+            return 4
 
-def cucha():
-    return maxi, 4, 0, 0
 
 def mov(board_win, num):
     global token_white_off
+    global token_black_off
     global token_white_play
     global token_black_play
     global token_white_win
@@ -243,7 +271,9 @@ def mov(board_win, num):
                 sys.exit()    
             if event.type == MOUSEBUTTONUP:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                
+
+
+                        
 #---------------para casilla de salida-------------------------------------------------------------------
                 if mouse_x >= 425  and mouse_x <= 474 and num == 1:
                     if mouse_y >= 360 and mouse_y <= 400 :
@@ -257,10 +287,11 @@ def mov(board_win, num):
                                             token_white_play += 1
                                             
                                         #--------maquina---------------------------------------
-                                            mm, flg, i, j = cucha()
+                                            
+                                            mm, flg, i, j = black_move(ma,ran(), token_black_off)
                                             mov_n(mm, flg, i, j, board_win)
                                             
-                                        flag = False               
+                                            flag = False               
                 elif mouse_x >= 425  and mouse_x <= 474 and num == 2:
                     if mouse_y >= 360 and mouse_y <= 400 :
                         for i in range(len(ma)):
@@ -273,10 +304,10 @@ def mov(board_win, num):
                                             token_white_play += 1
                                             
                                         #--------maquina---------------------------------------
-                                            mm, flg, i, j = cucha()
+                                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                             mov_n(mm, flg, i, j, board_win)
                                             
-                                        flag = False              
+                                            flag = False              
                 elif mouse_x >= 425  and mouse_x <= 474 and num == 3:
                     if mouse_y >= 360 and mouse_y <= 400 :
                         for i in range(len(ma)):
@@ -289,10 +320,10 @@ def mov(board_win, num):
                                             token_white_play += 1
                                             
                                         #--------maquina---------------------------------------
-                                            mm, flg, i, j = cucha()
+                                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                             mov_n(mm, flg, i, j, board_win)
                                             
-                                        flag = False
+                                            flag = False
                 elif mouse_x >= 425  and mouse_x <= 474 and num == 4:
                     if mouse_y >= 360 and mouse_y <= 400 :
                         for i in range(len(ma)):
@@ -303,7 +334,7 @@ def mov(board_win, num):
                                         if token_white_off != 0:
                                             token_white_off -= 1
                                             token_white_play += 1
-                                        flag = False
+                                            flag = False
                                     
 #---------------casilla 1-----------------------------------------------------------------
                 elif mouse_x >= 310  and mouse_x <= 390 and num == 1:
@@ -318,7 +349,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                             
                                         flag = False
@@ -334,7 +365,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -361,7 +392,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -374,7 +405,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                             
                                         flag = False
@@ -393,7 +424,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -420,7 +451,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -433,7 +464,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -449,7 +480,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -462,7 +493,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -491,7 +522,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -504,7 +535,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -520,7 +551,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -533,7 +564,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -549,7 +580,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -562,7 +593,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -580,7 +611,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -593,7 +624,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -609,7 +640,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -622,7 +653,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -638,7 +669,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -647,11 +678,11 @@ def mov(board_win, num):
                                         ma[1][2] = 3
                                         token_black_play -= 1
                                         token_black_off += 1
-                                        board_win.blit(ima21,(146,299))
+                                        board_win.blit(ima20,(56,299))
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -671,7 +702,6 @@ def mov(board_win, num):
 #---------------#casilla 5--------------------------------------------------------------------------
                 if mouse_x >= 66 and mouse_x <= 138 and num == 1:
                     if mouse_y >= 228 and mouse_y <= 284:
-                        print(11111)
                         if ma[1][0] == 3:
                             for i in range(len(ma)):
                                 for j in range(len(ma[i])):
@@ -682,7 +712,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -695,7 +725,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -711,7 +741,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -724,7 +754,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -752,7 +782,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -765,7 +795,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -783,7 +813,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -796,7 +826,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -823,7 +853,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -836,7 +866,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -853,7 +883,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -866,7 +896,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -895,7 +925,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -908,7 +938,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -924,7 +954,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -937,7 +967,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -954,7 +984,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -967,7 +997,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -985,7 +1015,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -998,7 +1028,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1014,7 +1044,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1027,7 +1057,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1043,7 +1073,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1056,7 +1086,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1073,7 +1103,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1086,7 +1116,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1104,7 +1134,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1117,7 +1147,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1133,7 +1163,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1146,7 +1176,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1162,7 +1192,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1175,7 +1205,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1192,7 +1222,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1210,7 +1240,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1223,7 +1253,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1239,7 +1269,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1252,7 +1282,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1268,7 +1298,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1298,7 +1328,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1311,7 +1341,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1327,7 +1357,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1354,7 +1384,7 @@ def mov(board_win, num):
                             matriz(ma, board_win, 95, 97)
                                         
                             #--------maquina---------------------------------------
-                            mm, flg, i, j = cucha()
+                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                             mov_n(mm, flg, i, j, board_win)
                                          
                             flag = False
@@ -1372,7 +1402,7 @@ def mov(board_win, num):
                                         matriz(ma, board_win, 95, 97)
                                         
                                 #--------maquina---------------------------------------
-                                        mm, flg, i, j = cucha()
+                                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
                                         mov_n(mm, flg, i, j, board_win)
                                          
                                         flag = False
@@ -1398,7 +1428,7 @@ def mov(board_win, num):
                             matriz(ma, board_win, 95, 97)
                                         
                             #--------maquina---------------------------------------
-                            mm, flg, i, j = cucha()
+                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                             mov_n(mm, flg, i, j, board_win)
                               
                             flag = False
@@ -1426,7 +1456,7 @@ def mov(board_win, num):
                             matriz(ma, board_win, 95, 97)
                                         
                             #--------maquina---------------------------------------
-                            mm, flg, i, j = cucha()
+                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                             mov_n(mm, flg, i, j, board_win)
                               
                             flag = False
@@ -1443,7 +1473,7 @@ def mov(board_win, num):
                             matriz(ma, board_win, 95, 97)
                                         
                             #--------maquina---------------------------------------
-                            mm, flg, i, j = cucha()
+                            mm, flg, i, j = black_move(ma,ran(),token_black_off)
                             mov_n(mm, flg, i, j, board_win)
                               
                             flag = False
@@ -1452,6 +1482,13 @@ def mov(board_win, num):
                 if mouse_x >= 600 and mouse_x <= 800:
                     if mouse_y >= 500 and mouse_y <= 600:
                         flag = False
+
+                if mouse_x >= 94 and mouse_x <= 194:
+                    if mouse_y >= 497 and mouse_y <= 534:
+                    
+                    #--------maquina---------------------------------------
+                        mm, flg, i, j = black_move(ma,ran(),token_black_off)
+                        mov_n(mm, flg, i, j, board_win)
         pygame.display.update()
 
 
@@ -1460,53 +1497,66 @@ def mov(board_win, num):
 
 def mov_n(mm, flg, i, j, board_win):
     global token_black_play
-    global token_black_off
-    global token_black_play
-    global token_black_win
     global token_white_play
-    global token_white_off
+
+    global token_black_win
+    global token_white_win
     
-    if flg == 3:
+    global token_white_off
+    global token_black_off
+
+    global ma
+    
+    ma = mm
+    print("flag:", flg)
+    if flg == 3 and i == 0 and j==4:
+        token_black_play +=1
+        token_black_off -= 1
         borrar(board_win, i, j)
-        matriz(mm, board_win, 95, 97)
-        md, f, x, y = cucha()
+        matriz(ma, board_win, 95, 97)
+        md, f, x, y = black_move(ma,ran(),token_black_off)
+        mov_n(md, f, x, y, board_win)
+    elif flg == 3:
+        borrar(board_win, i, j)
+        matriz(ma, board_win, 95, 97)
+        md, f, x, y = black_move(ma,ran(),token_black_off)
         mov_n(md, f, x, y, board_win)
     elif flg == 1:
         token_black_play +=1
         token_black_off -= 1
         borrar(board_win, i, j)
-        matriz(mm, board_win, 95, 97)
+        matriz(ma, board_win, 95, 97)
     elif flg == 2:
         token_black_play -= 1
         token_black_win += 1
         borrar(board_win, i, j)
         board_win.blit(win_bl,(550,90))
-        matriz(mm, board_win, 95, 97)
+        matriz(ma, board_win, 95, 97)
     elif flg == 0:
-        token_white_play -= 1
         token_white_off += 1
+        token_white_play -= 1
         borrar(board_win, i, j)
-        matriz(mm, board_win, 95, 97)
+        matriz(ma, board_win, 95, 97)
     elif flg == 4:
         borrar(board_win, i, j)
-        matriz(mm, board_win, 95, 97)
+        matriz(ma, board_win, 95, 97)
     
         
               
 def borrar(board_win, i,j):
     if i == 0:
         if j == 0:
-            board_win.blit(ima00,(89,171))
+            board_win.blit(ima00,(89,161))
         elif j == 1:
-            board_win.blit(ima01,(171,171))
+            board_win.blit(ima01,(170,163))
         elif j == 2:
-            board_win.blit(ima02,(249,173))
+            board_win.blit(ima02,(251,160))
         elif j == 3:
-            board_win.blit(ima03,(335,173))
+            board_win.blit(ima03,(331,161))
         elif j == 6:
-            board_win.blit(ima06,(575,173))
+            board_win.blit(ima06,(577,164))
         elif j == 7:
-            board_win.blit(ima07,(651,177))
+            board_win.blit(ima07,(655,166))
     elif i == 1:
         if j == 0:
             board_win.blit(ima10,(74,230))
