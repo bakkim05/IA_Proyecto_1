@@ -86,7 +86,7 @@ def board():
     global token_black_win
 
     
-    Fichas = fuente.render('Fichas:', 1, (0, 0, 0))
+    Fichas = fuente.render('Finish:', 1, (0, 0, 0))
     
     pygame.display.flip()
     
@@ -1509,19 +1509,8 @@ def mov_n(mm, flg, i, j, board_win):
     
     ma = mm
     print("flag:", flg)
-    if flg == 3 and i == 0 and j==4:
-        token_black_play +=1
-        token_black_off -= 1
-        borrar(board_win, i, j)
-        matriz(ma, board_win, 95, 97)
-        md, f, x, y = black_move(ma,ran(),token_black_off)
-        mov_n(md, f, x, y, board_win)
-    elif flg == 3:
-        borrar(board_win, i, j)
-        matriz(ma, board_win, 95, 97)
-        md, f, x, y = black_move(ma,ran(),token_black_off)
-        mov_n(md, f, x, y, board_win)
-    elif flg == 1:
+    
+    if flg == 1:
         token_black_play +=1
         token_black_off -= 1
         borrar(board_win, i, j)
@@ -1540,6 +1529,19 @@ def mov_n(mm, flg, i, j, board_win):
     elif flg == 4:
         borrar(board_win, i, j)
         matriz(ma, board_win, 95, 97)
+    elif flg == 3 and i == 0 and j==4:
+        token_black_play +=1
+        token_black_off -= 1
+        md, f, x, y = black_move(ma,ran(),token_black_off)
+        ma = md
+        mov_n(ma, f, x, y, board_win)
+    elif flg == 3:
+        borrar(board_win, i, j)
+        matriz(ma, board_win, 95, 97)
+        md, f, x, y = black_move(ma,ran(),token_black_off)
+        ma = md
+        mov_n(ma, f, x, y, board_win)
+        
     
         
               
