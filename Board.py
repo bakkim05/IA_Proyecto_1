@@ -116,14 +116,6 @@ def board():
             if event.type == MOUSEBUTTONUP:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
   
-                """print(mouse_x,mouse_y)
-                if mouse_x >= 66 and mouse_x <= 138:
-                    print("aqui x")
-                    if mouse_y >= 228 and mouse_y <= 284:
-                        print("aqui y")"""
-                
-                        
-
    
                 #si se presionan los datos
                 if mouse_x >= 600 and mouse_x <= 800:
@@ -151,10 +143,10 @@ def board():
                             board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
-                                 t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU WIN!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (300, 245))
                             elif token_black_win == 7:
-                                 t = fuente.render("PERDISTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU LOST!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (300, 245))
                                  
                                      
@@ -176,10 +168,10 @@ def board():
                             board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
-                                 t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU WIN!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (305, 245))
                             elif token_black_win == 7:
-                                 t = fuente.render("PERDISTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU LOST!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (300, 245))
                                 
                         elif num == 3:
@@ -200,10 +192,10 @@ def board():
                             board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
-                                 t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU WIN!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (305, 245))
                             elif token_black_win == 7:
-                                 t = fuente.render("PERDISTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU LOST!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (300, 245))
                                 
                         elif num == 4:
@@ -224,10 +216,10 @@ def board():
                             board_win.blit(pas, (100, 500))
                             
                             if token_white_win == 7:
-                                 t = fuente.render("GANASTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU WIN!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (305, 245))
                             elif token_black_win == 7:
-                                 t = fuente.render("PERDISTE!!!!!", 1, (255, 255, 0))
+                                 t = fuente.render("YOU LOST!!!!!", 1, (255, 255, 0))
                                  board_win.blit(t, (300, 245))
                         
         pygame.display.update()
@@ -1509,8 +1501,18 @@ def mov_n(mm, flg, i, j, board_win):
     
     ma = mm
     print("flag:", flg)
-    
-    if flg == 1:
+    if flg == 3 and i == 0 and j==4:
+        token_black_play +=1
+        token_black_off -= 1
+        matriz(ma, board_win, 95, 97)
+        md, f, x, y = black_move(ma,ran(),token_black_off)
+        mov_n(md, f, x, y, board_win)
+    elif flg == 3:
+        borrar(board_win, i, j)
+        matriz(ma, board_win, 95, 97)
+        md, f, x, y = black_move(ma,ran(),token_black_off)
+        mov_n(md, f, x, y, board_win)
+    elif flg == 1:
         token_black_play +=1
         token_black_off -= 1
         borrar(board_win, i, j)
@@ -1529,18 +1531,7 @@ def mov_n(mm, flg, i, j, board_win):
     elif flg == 4:
         borrar(board_win, i, j)
         matriz(ma, board_win, 95, 97)
-    elif flg == 3 and i == 0 and j==4:
-        token_black_play +=1
-        token_black_off -= 1
-        md, f, x, y = black_move(ma,ran(),token_black_off)
-        ma = md
-        mov_n(ma, f, x, y, board_win)
-    elif flg == 3:
-        borrar(board_win, i, j)
-        matriz(ma, board_win, 95, 97)
-        md, f, x, y = black_move(ma,ran(),token_black_off)
-        ma = md
-        mov_n(ma, f, x, y, board_win)
+    
         
     
         
